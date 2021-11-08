@@ -12,16 +12,16 @@ namespace dijkstra_test_csharp
             Program p = new Program();
 
             Node node = p.CreateNode("Aki", 38.738439f, 140.741562f);
-            Node node2 = p.CreateNodeWithOrigin("Yukiban", 38.658362f, 140.863543f, node);
-            Node node3 = p.CreateNodeWithOrigin("Osaki City Hall", 38.576945f, 140.955698f, node2);
-            Node node4 = p.CreateNodeWithOrigin("Nishi-Furukawa", 38.578384f, 140.895211f, node2);
-            Node node5 = p.CreateNodeWithOrigin("Sakurazutsimi Park", 38.524911f, 140.955379f, node3);
-            Node node6 = p.CreateNodeWithOrigin("Magariyashik", 38.537837f, 141.002235f, node3);
-            Node node7 = p.CreateNodeWithOrigin("Pacific Ocean East", -2.351121f, 175.280974f, node6);
-            Node node8 = p.CreateNodeWithOrigin("Pacific Ocean West", -4.099388f, -170.180773f, node7);
-            node4.AddConnection(node3);
-            node4.AddConnection(node5);
-            node5.AddConnection(node6);
+            Node node2 = p.CreateNodeWithOrigin("Yukiban", 38.658362f, 140.863543f, node, true);
+            Node node3 = p.CreateNodeWithOrigin("Osaki City Hall", 38.576945f, 140.955698f, node2, true);
+            Node node4 = p.CreateNodeWithOrigin("Nishi-Furukawa", 38.578384f, 140.895211f, node2, true);
+            Node node5 = p.CreateNodeWithOrigin("Sakurazutsimi Park", 38.524911f, 140.955379f, node3, true);
+            Node node6 = p.CreateNodeWithOrigin("Magariyashik", 38.537837f, 141.002235f, node3, true);
+            Node node7 = p.CreateNodeWithOrigin("Pacific Ocean East", -2.351121f, 175.280974f, node6, true);
+            Node node8 = p.CreateNodeWithOrigin("Pacific Ocean West", -4.099388f, -170.180773f, node7, true);
+            node4.AddConnectionBothWay(node3);
+            node4.AddConnectionBothWay(node5);
+            node5.AddConnectionBothWay(node6);
 
             List<Connection> NodeConnections = new List<Connection>();
 
@@ -51,11 +51,22 @@ namespace dijkstra_test_csharp
             return tempNode;
         }
 
-        Node CreateNodeWithOrigin(string name, float lat, float lon, Node peer)
+        Node CreateNodeWithOrigin(string name, float lat, float lon, Node peer, bool both)
         {
-            Node tempNode = new Node(name, lat, lon, peer);
-            globe.Add(tempNode);
-            return tempNode;
+            if (both)
+            {
+
+                Node tempNode = new Node(name, lat, lon, peer, true);
+                globe.Add(tempNode);
+                return tempNode;
+            }
+            else
+            {
+
+                Node tempNode = new Node(name, lat, lon, peer);
+                globe.Add(tempNode);
+                return tempNode;
+            }
         }
 
 
