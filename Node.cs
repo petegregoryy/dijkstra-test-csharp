@@ -29,6 +29,24 @@ class Node
         AddConnectionBack(peer);
     }
 
+    public Node(string name, float lat, float lon, Node peer, bool both)
+    {
+        _lat = lat;
+        _long = lon;
+        _name = name;
+        _nDistance = 999999;
+        _visited = false;
+        if (both)
+        {
+            AddConnectionBothWay(peer);
+        }
+        else
+        {
+            AddConnectionBack(peer);
+        }
+
+    }
+
     public Node(string name, Vector v)
     {
         _lat = v.X();
