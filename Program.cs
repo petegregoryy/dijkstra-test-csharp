@@ -9,29 +9,41 @@ namespace dijkstra_test_csharp
         static void Main(string[] args)
         {
             Program p = new Program();
-            Node node = p.CreateNode("London", 51.502913f, -0.111447f);
-            Node node2 = p.CreateNode("Japan", 38.738439f, 140.741562f);
 
-
-            node.AddConnectionBothWay(node2);
-            Console.WriteLine("{2} - Lat: {0} - Long: {1}", node.GetCoordinates().X(), node.GetCoordinates().Y(), node.GetName());
-            Console.WriteLine("{2} - Connection X: {0} - Connection Y: {1}", node.GetConnections()[0].GetNode().GetCoordinates().X(), node.GetConnections()[0].GetNode().GetCoordinates().Y(), node.GetConnections()[0].GetNode().GetName());
-            Console.WriteLine("Distance: {0} km", node.GetConnections()[0].GetDistance());
+            Node node = p.CreateNode("Aki", 38.738439f, 140.741562f);
+            Node node2 = p.CreateNodeWithOrigin("Yukiban", 38.658362f, 140.863543f, node);
+            Node node3 = p.CreateNodeWithOrigin("Osaki City Hall", 38.576945f, 140.955698f, node2);
+            Node node4 = p.CreateNodeWithOrigin("Nishi-Furukawa", 38.578384f, 140.895211f, node2);
+            Node node5 = p.CreateNodeWithOrigin("Sakurazutsimi Park", 38.524911f, 140.955379f, node3);
+            node4.AddConnection(node3);
+            node4.AddConnection(node5);
 
             List<Connection> NodeConnections = new List<Connection>();
 
+            foreach (Node point in p.globe)
+            {
+                foreach (Connection c in point.GetConnections())
+                {
+                    NodeConnections.Add(c);
+                }
+            }
 
-
-            NodeConnections.Add(node.GetConnections()[0]);
-            NodeConnections.Add(node2.GetConnections()[0]);
-
-            Console.WriteLine("{0} - Distance: {1} km", NodeConnections[0].GetName(), NodeConnections[0].GetDistance());
-            Console.WriteLine("{0} - Distance: {1} km", NodeConnections[1].GetName(), NodeConnections[1].GetDistance());
+            foreach (Connection con in NodeConnections)
+            {
+                Console.WriteLine("{0} - Distance: {1} km", con.GetName(), con.GetDistance());
+            }
         }
 
         Node CreateNode(string name, float lat, float lon)
         {
             Node tempNode = new Node(name, lat, lon);
+            globe.Add(tempNode);
+            return tempNode;
+        }
+
+        Node CreateNodeWithOrigin(string name, float lat, float lon, Node peer)
+        {
+            Node tempNode = new Node(name, lat, lon, peer);
             globe.Add(tempNode);
             return tempNode;
         }

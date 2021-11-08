@@ -4,9 +4,10 @@ class Node
 {
     private float _lat;
     private float _long;
-
     private string _name;
     private float _nDistance;
+
+    private bool _visited;
     List<Connection> connections = new List<Connection>();
 
     public Node(string name, float lat, float lon)
@@ -15,6 +16,17 @@ class Node
         _long = lon;
         _name = name;
         _nDistance = 999999;
+        _visited = false;
+    }
+
+    public Node(string name, float lat, float lon, Node peer)
+    {
+        _lat = lat;
+        _long = lon;
+        _name = name;
+        _nDistance = 999999;
+        _visited = false;
+        AddConnectionBack(peer);
     }
 
     public Node(string name, Vector v)
@@ -23,6 +35,7 @@ class Node
         _long = v.Y();
         _name = name;
         _nDistance = 999999;
+        _visited = false;
     }
 
     public void UpdateDistance(float dist)
@@ -39,6 +52,11 @@ class Node
     {
         Connection con = new Connection(this, peer);
         connections.Add(con);
+    }
+
+    public void AddConnectionBack(Node peer)
+    {
+        peer.AddConnection(this);
     }
 
     public void AddConnectionBothWay(Node peer)
@@ -68,5 +86,13 @@ class Node
         return _name;
     }
 
+    public bool IsVisited()
+    {
+        return _visited;
+    }
 
+    public void SetVisited()
+    {
+        _visited = true;
+    }
 }
