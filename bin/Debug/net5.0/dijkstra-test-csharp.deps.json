@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "dijkstra-test-csharp/1.0.0": {
+        "runtime": {
+          "dijkstra-test-csharp.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "dijkstra-test-csharp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

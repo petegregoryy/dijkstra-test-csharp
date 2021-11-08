@@ -1,0 +1,16 @@
+/home/pete/Documents/repos/dijkstra-test-csharp/bin/Debug/net5.0/dijkstra-test-csharp
+/home/pete/Documents/repos/dijkstra-test-csharp/bin/Debug/net5.0/dijkstra-test-csharp.deps.json
+/home/pete/Documents/repos/dijkstra-test-csharp/bin/Debug/net5.0/dijkstra-test-csharp.runtimeconfig.json
+/home/pete/Documents/repos/dijkstra-test-csharp/bin/Debug/net5.0/dijkstra-test-csharp.runtimeconfig.dev.json
+/home/pete/Documents/repos/dijkstra-test-csharp/bin/Debug/net5.0/dijkstra-test-csharp.dll
+/home/pete/Documents/repos/dijkstra-test-csharp/bin/Debug/net5.0/ref/dijkstra-test-csharp.dll
+/home/pete/Documents/repos/dijkstra-test-csharp/bin/Debug/net5.0/dijkstra-test-csharp.pdb
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.csproj.AssemblyReference.cache
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.GeneratedMSBuildEditorConfig.editorconfig
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.AssemblyInfoInputs.cache
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.AssemblyInfo.cs
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.csproj.CoreCompileInputs.cache
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.dll
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/ref/dijkstra-test-csharp.dll
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.pdb
+/home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.genruntimeconfig.cache
