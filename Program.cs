@@ -40,7 +40,7 @@ namespace dijkstra_test_csharp
 
             string name = "Aki";
             p.globe.Find(point => point.GetName() == name);
-            p.Dijkstra(node, node8);
+            p.Dijkstra(node6, node2);
 
         }
 
@@ -103,7 +103,7 @@ namespace dijkstra_test_csharp
 
             }
             int count = 0;
-            for (int i = path.Count - 1; i > 0; i--)
+            for (int i = path.Count - 1; i >= 0; i--)
             {
                 count++;
                 Console.WriteLine("Step {2}: {0} - {1}", path[i].GetName(), path[i].GetDistance(), count);
