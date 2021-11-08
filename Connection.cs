@@ -3,7 +3,7 @@ using System;
 class Connection
 {
     Node _node;
-    float _distance;
+    double _distance;
 
     string _name;
 
@@ -19,7 +19,7 @@ class Connection
         return _node;
     }
 
-    public float GetDistance()
+    public double GetDistance()
     {
         return _distance;
     }
@@ -28,7 +28,7 @@ class Connection
         return _name;
     }
 
-    float CoordToKm(float lat1, float long1, float lat2, float long2)
+    double CoordToKm(float lat1, float long1, float lat2, float long2)
     {
         int R = 6371;
         float dLat = deg2rad(lat2 - lat1);
@@ -36,7 +36,7 @@ class Connection
         double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) + Math.Cos(deg2rad(lat1)) * Math.Cos(deg2rad(lat2)) * Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
         double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         double d = R * c;
-        return (float)d;
+        return d;
     }
 
     float deg2rad(float deg)

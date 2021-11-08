@@ -5,8 +5,8 @@ class Node
     private float _lat;
     private float _long;
     private string _name;
-    private float _nDistance;
-
+    private double _nDistance;
+    private Node _shortestParent;
     private bool _visited;
     List<Connection> connections = new List<Connection>();
 
@@ -38,9 +38,18 @@ class Node
         _visited = false;
     }
 
-    public void UpdateDistance(float dist)
+    public void UpdateDistance(double dist, Node par)
     {
-        _nDistance = dist;
+        if (dist < _nDistance)
+        {
+            _nDistance = dist;
+            _shortestParent = par;
+        }
+    }
+
+    public double GetDistance()
+    {
+        return _nDistance;
     }
 
     public List<Connection> GetConnections()
@@ -94,5 +103,10 @@ class Node
     public void SetVisited()
     {
         _visited = true;
+    }
+
+    public Node GetShortestParent()
+    {
+        return _shortestParent;
     }
 }
