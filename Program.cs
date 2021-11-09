@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace dijkstra_test_csharp
 {
@@ -11,17 +12,22 @@ namespace dijkstra_test_csharp
         {
             Program p = new Program();
 
+
+
+
             Node node = p.CreateNode("Aki", 38.738439f, 140.741562f);
-            Node node2 = p.CreateNodeWithOrigin("Yukiban", 38.658362f, 140.863543f, node, true);
+            Node node2 = p.CreateNodeWithOrigin("Yubikan", 38.658362f, 140.863543f, node, true);
             Node node3 = p.CreateNodeWithOrigin("Osaki City Hall", 38.576945f, 140.955698f, node2, true);
             Node node4 = p.CreateNodeWithOrigin("Nishi-Furukawa", 38.578384f, 140.895211f, node2, true);
             Node node5 = p.CreateNodeWithOrigin("Sakurazutsimi Park", 38.524911f, 140.955379f, node3, true);
             Node node6 = p.CreateNodeWithOrigin("Magariyashik", 38.537837f, 141.002235f, node3, true);
             Node node7 = p.CreateNodeWithOrigin("Pacific Ocean East", -2.351121f, 175.280974f, node6, true);
             Node node8 = p.CreateNodeWithOrigin("Pacific Ocean West", -4.099388f, -170.180773f, node7, true);
+            Node node9 = p.CreateNodeWithOrigin("Sendai", 38.268008f, 140.869364f, node5, true);
             node4.AddConnectionBothWay(node3);
             node4.AddConnectionBothWay(node5);
             node5.AddConnectionBothWay(node6);
+            node6.AddConnectionBothWay(node9);
 
             List<Connection> NodeConnections = new List<Connection>();
 
@@ -38,10 +44,9 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("{0} - Distance: {1} km", con.GetName(), con.GetDistance());
             }
 
-            string name = "Aki";
-            p.globe.Find(point => point.GetName() == name);
-            p.Dijkstra(node6, node2);
-
+            //string name = "Aki";
+            //p.globe.Find(point => point.GetName() == name);
+            p.Dijkstra(node, node9);
         }
 
         Node CreateNode(string name, float lat, float lon)
@@ -55,14 +60,12 @@ namespace dijkstra_test_csharp
         {
             if (both)
             {
-
                 Node tempNode = new Node(name, lat, lon, peer, true);
                 globe.Add(tempNode);
                 return tempNode;
             }
             else
             {
-
                 Node tempNode = new Node(name, lat, lon, peer);
                 globe.Add(tempNode);
                 return tempNode;
@@ -85,7 +88,7 @@ namespace dijkstra_test_csharp
                         queue.Add(queue[k].GetConnections()[i].GetNode());
                         queue[k].GetConnections()[i].GetNode().UpdateDistance(queue[k].GetConnections()[i].GetDistance() + queue[k].GetDistance(), queue[k]);
                         queue[k].GetConnections()[i].GetNode().SetVisited();
-                        Console.WriteLine("Parent: {0} Visiting: {1} Distance: {2}", queue[k].GetName(), queue[k].GetConnections()[i].GetNode().GetName(), queue[k].GetConnections()[i].GetNode().GetDistance());
+                        Console.WriteLine("Parent: {0} - Visiting: {1} Distance: {2}", queue[k].GetName(), queue[k].GetConnections()[i].GetNode().GetName(), queue[k].GetConnections()[i].GetNode().GetDistance());
                     }
                 }
             }

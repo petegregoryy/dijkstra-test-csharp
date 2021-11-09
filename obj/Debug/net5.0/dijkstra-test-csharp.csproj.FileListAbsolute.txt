@@ -14,3 +14,4 @@
 /home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/ref/dijkstra-test-csharp.dll
 /home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.pdb
 /home/pete/Documents/repos/dijkstra-test-csharp/obj/Debug/net5.0/dijkstra-test-csharp.genruntimeconfig.cache
+/home/pete/Documents/repos/dijkstra-test-csharp/bin/Debug/net5.0/Newtonsoft.Json.dll

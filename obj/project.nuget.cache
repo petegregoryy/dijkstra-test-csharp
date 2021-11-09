@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "RqkajwzPF5DZZq6cptQHjUo5zntJcbZ6X8J3HQ8gYg1EXYstfqn/FiUCNhA12+UThV1mqNtT/Xt5BjKa4WQuVg==",
+  "dgSpecHash": "q8M0r7nXNrn0C1zpwibMO8rp01DUVO759opwIn2xEC0kjZGJYb+qM3wI3ZrT1dbPCq7hvrq5EHhGQ6n2jldzPw==",
   "success": true,
   "projectFilePath": "/home/pete/Documents/repos/dijkstra-test-csharp/dijkstra-test-csharp.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/pete/.nuget/packages/newtonsoft.json/13.0.1/newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
   "logs": []
 }
