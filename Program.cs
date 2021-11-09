@@ -12,9 +12,7 @@ namespace dijkstra_test_csharp
         {
             Program p = new Program();
 
-
-
-
+            #region NodeCreation
             Node node = p.CreateNode("Aki", 38.738439f, 140.741562f);
             Node node2 = p.CreateNodeWithOrigin("Yubikan", 38.658362f, 140.863543f, node, true);
             Node node3 = p.CreateNodeWithOrigin("Osaki City Hall", 38.576945f, 140.955698f, node2, true);
@@ -28,6 +26,7 @@ namespace dijkstra_test_csharp
             node4.AddConnectionBothWay(node5);
             node5.AddConnectionBothWay(node6);
             node6.AddConnectionBothWay(node9);
+            #endregion
 
             List<Connection> NodeConnections = new List<Connection>();
 
