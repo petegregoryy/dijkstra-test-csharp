@@ -43,8 +43,6 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("{0} - Distance: {1} km", con.GetName(), con.GetDistance());
             }
 
-            //string name = "Aki";
-            //p.globe.Find(point => point.GetName() == name);
             p.Dijkstra(node, node9);
         }
 
@@ -102,7 +100,6 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("Shortest Parent: {0}", shortestParent.GetName());
                 path.Add(shortestParent);
                 shortestParent = shortestParent.GetShortestParent();
-
             }
             int count = 0;
             for (int i = path.Count - 1; i >= 0; i--)
@@ -111,8 +108,6 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("Step {2}: {0} - {1}", path[i].GetName(), path[i].GetDistance(), count);
 
             }
-
-
         }
 
         int IndexByName(string name)

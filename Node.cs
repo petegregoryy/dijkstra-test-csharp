@@ -44,7 +44,6 @@ class Node
         {
             AddConnectionBack(peer);
         }
-
     }
 
     public Node(string name, Vector v)
