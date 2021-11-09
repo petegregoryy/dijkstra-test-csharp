@@ -1,4 +1,6 @@
 const fs = require("fs");
+var exec = require("child_process").exec;
+
 
 let GeoJsonFile = JSON.parse(fs.readFileSync("data/25.geojson"));
 
@@ -8,6 +10,24 @@ let GeoFeatures = GeoJsonFile.features;
 
 console.log(GeoFeatures)
 
+let JsonTemplate = {
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [125.6, 10.1]
+    },
+    "properties": {
+      "name": "Dinagat Islands"
+    }
+}
+
+let finalFeatures = {
+    "type": "FeatureCollection",
+    "features":[],
+}
+
+
+
 let features = [];
 let first = true;
 GeoFeatures.forEach(feature =>
@@ -16,62 +36,109 @@ GeoFeatures.forEach(feature =>
 });
 GeoFeatures.forEach(feature =>
 {
+    
     if (first)
     {
-        features.push(`{"_lat":${feature.geometry.coordinates[0][0]},"_long":${feature.geometry.coordinates[0][1]},"_name":${feature.properties.From}}`)
-        features.push(`{"_lat":${feature.geometry.coordinates[1][0]},"_long":${feature.geometry.coordinates[1][1]},"_name":${feature.properties.To}}`)
+        //features.push(`{"_lat":${feature.geometry.coordinates[0][0]},"_long":${feature.geometry.coordinates[0][1]},"_name":${feature.properties.From}}`)
+        //features.push(`{"_lat":${feature.geometry.coordinates[1][0]},"_long":${feature.geometry.coordinates[1][1]},"_name":${feature.properties.To}}`)
         first = false;
+
+        let pushJson = JsonTemplate;
+        
+        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0],feature.geometry.coordinates[0][1]]
+        pushJson.properties.name = feature.properties.From;
+        features.push(pushJson);
+
+        let pushJson2 = JsonTemplate;
+        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0],feature.geometry.coordinates[0][1]]
+        pushJson.properties.name = feature.properties.From;
+        features.push(pushJson2);
     }
     else
     {
+        let pushJson = JsonTemplate;
+        
+        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0],feature.geometry.coordinates[0][1]]
+        pushJson.properties.name = feature.properties.From;
+        features.push({
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
+            },
+            "properties": {
+              "name": feature.properties.From
+            }
+        });
 
-        let dupe = false;
-        let dupe2 = false;
-        /*
-        features.forEach(element =>
-        {
-            if (element.name == feature.properties.From || element._lat == feature.geometry.coordinates[0][0] && element._long == feature.geometry.coordinates[0][1])
-            {
-                dupe = true;
+        let pushJson2 = JsonTemplate;
+        pushJson.geometry.coordinates = [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0],feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
+        pushJson.properties.name = feature.properties.From;
+        features.push({
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0], feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
+            },
+            "properties": {
+              "name": feature.properties.To
             }
-            if (element.name == feature.properties.To || element._lat == feature.geometry.coordinates[1][0] && element._long == feature.geometry.coordinates[1][1])
-            {
-                dupe2 = true;
-            }
-        });*/
-        if (!dupe)
-        {
-            features.push(`{"_lat":${feature.geometry.coordinates[0][0]},"_long":${feature.geometry.coordinates[0][1]},"_name":${feature.properties.From}}`)
-        }
-        if (!dupe2)
-        {
-            features.push(`{"_lat":${feature.geometry.coordinates[1][0]},"_long":${feature.geometry.coordinates[1][1]},"_name":${feature.properties.To}}`)
-        }
+        });
     }
 });
-featureString = features.join(',');
-features = JSON.parse('[' + featureString + ']');
-finalFeatures = []
+//featureString = features.join(',');
+//features = JSON.parse('[' + featureString + ']');
+//finalFeatures = []
+console.log(features)
+let dupes = 1;
+let valids = 1;
+let cycles = 1;
+finalFeatures.features.push(features[0]);
 features.forEach(featureChecking =>
 {
-    let dupe = false;
-    features.forEach(element => 
-    {
-
-        if (featureChecking === element)
-        {
-            dupe = false;
-            return;
+    cycles++
+    valid = false;
+    finalFeatures.features.forEach(element => {
+        if(featureChecking.properties.name === element.properties.name && featureChecking.geometry.coordinates[0] === element.geometry.coordinates[0] && featureChecking.geometry.coordinates[1] === element.geometry.coordinates[1]){
+            valid = false;
+            return
         }
-        if (featureChecking._lat === element._lat && featureChecking._long === element._long)
-        {
-            dupe = true;
+        else{
+            valid = true
+            
         }
     });
-    if (!dupe)
-    {
-        finalFeatures.push(featureChecking);
+    if(valid){
+        valids = finalFeatures.features.push(featureChecking)
     }
+    else{
+        dupes++
+    }
+
 });
 console.log("Final Featurres!")
 console.log(finalFeatures)
+console.log(`Dupes: ${dupes} - Valids: ${valids} - Cycles: ${cycles}`);
+
+let finalDupe = 0;
+finalFeatures.features.forEach(feature => {
+    let workingNum = 0;
+    finalFeatures.features.forEach(innerFeature => {
+        if(feature === innerFeature){
+            workingNum++;
+        }
+    });
+    if(workingNum >1){
+        finalDupe++
+    }
+});
+console.log(`Final Duplicates: ${finalDupe}`);
+fs.writeFileSync("data/features.geojson",JSON.stringify(finalFeatures));
+
+exec(`ruby ruby/ocean-name.rb ${finalFeatures.features[8000].geometry.coordinates[0]} ${finalFeatures.features[8000].geometry.coordinates[1]}`, function (err, stdout, stderr) {
+    console.log(stdout);
+});
+
+finalFeatures.features.forEach(feature => {
+    
+})

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace dijkstra_test_csharp
 {
@@ -8,6 +7,7 @@ namespace dijkstra_test_csharp
     {
         List<Node> globe = new List<Node>();
         List<Node> queue = new List<Node>();
+
         static void Main(string[] args)
         {
             Program p = new Program();
