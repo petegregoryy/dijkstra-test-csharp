@@ -29,6 +29,11 @@ let finalFeatures = {
     "features":[],
 }
 
+let uncheckedFeatures = {
+    "type": "FeatureCollection",
+    "features":[],
+}
+
 
 
 let features = [];
@@ -127,6 +132,7 @@ let cycles = 1;
 finalFeatures.features.push(features[0]);
 features.forEach(featureChecking =>
 {
+    uncheckedFeatures.features.push(featureChecking);
     cycles++
     valid = false;
     finalFeatures.features.forEach(element => {
@@ -164,7 +170,8 @@ finalFeatures.features.forEach(feature => {
     }
 });
 console.log(`Final Duplicates: ${finalDupe}`);
-fs.writeFileSync("data/features.geojson",JSON.stringify(finalFeatures));
+fs.writeFileSync("data/features.geojson", JSON.stringify(finalFeatures));
+fs.writeFileSync("data/features-inc-dupes.geojson",JSON.stringify(uncheckedFeatures));
 fs.writeFileSync("data/ocean-points.json",JSON.stringify(finalFeatures.features));
 
 child_process.exec(`ruby ruby/ocean-name.rb 0 0`, function (err, stdout, stderr) {

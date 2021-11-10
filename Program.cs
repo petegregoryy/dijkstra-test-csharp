@@ -34,13 +34,14 @@ namespace dijkstra_test_csharp
 
             #region Json Serialisation and Conversion
 
+            string filePathForLinks = "./data/features-inc-dupes.geojson";
             string filePath = "./data/features.geojson";
 
             List<GeoFeature> geoFeats = new List<GeoFeature>();
 
             string file = File.ReadAllText(filePath);
-
-
+            string links = File.ReadAllText(filePathForLinks);
+            FeatureCollection linkCollection = JsonConvert.DeserializeObject<FeatureCollection>(links);
             FeatureCollection collection = JsonConvert.DeserializeObject<FeatureCollection>(file);
 
             for (int i = 0; i < collection.features.Count; i++)
@@ -48,19 +49,19 @@ namespace dijkstra_test_csharp
                 p.globe.Add(new Node(collection.features[i].properties.name, collection.features[i].geometry.coordinates[0], collection.features[i].geometry.coordinates[1]));
             }
 
-            for (int i = 0; i < collection.features.Count; i++)
+            for (int i = 0; i < linkCollection.features.Count; i++)
             {
-                if (collection.features[i].properties.connectsFrom != null)
+                if (linkCollection.features[i].properties.connectsFrom != null)
                 {
-                    Node origin = p.globe.Find(e => e.GetName() == collection.features[i].properties.name);
-                    Node target = p.globe.Find(e => e.GetName() == collection.features[i].properties.connectsFrom);
+                    Node origin = p.globe.Find(e => e.GetName() == linkCollection.features[i].properties.name);
+                    Node target = p.globe.Find(e => e.GetName() == linkCollection.features[i].properties.connectsFrom);
 
                     origin.AddConnection(target);
                 }
-                else if (collection.features[i].properties.connectsTo != null)
+                else if (linkCollection.features[i].properties.connectsTo != null)
                 {
-                    Node origin = p.globe.Find(e => e.GetName() == collection.features[i].properties.name);
-                    Node target = p.globe.Find(e => e.GetName() == collection.features[i].properties.connectsTo);
+                    Node origin = p.globe.Find(e => e.GetName() == linkCollection.features[i].properties.name);
+                    Node target = p.globe.Find(e => e.GetName() == linkCollection.features[i].properties.connectsTo);
 
                     origin.AddConnection(target);
                 }
@@ -85,7 +86,10 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("{0} - Distance: {1} km", con.GetName(), con.GetDistance());
             }
 
-            //p.Dijkstra(node, node9);
+            Node node = p.globe.Find(e => e.GetName() == "89209");
+            Node node1 = p.globe.Find(e => e.GetName() == "202662");
+
+            p.Dijkstra(node, node1);
         }
 
         Node CreateNode(string name, float lat, float lon)
