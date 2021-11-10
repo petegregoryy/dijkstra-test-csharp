@@ -1,14 +1,15 @@
 const fs = require("fs");
 var exec = require("child_process").exec;
-
+var execSync = require("child_process").execSync;
+const child_process = require("child_process");
 
 let GeoJsonFile = JSON.parse(fs.readFileSync("data/25.geojson"));
 
-console.log(GeoJsonFile)
+//console.log(GeoJsonFile)
 
 let GeoFeatures = GeoJsonFile.features;
 
-console.log(GeoFeatures)
+//console.log(GeoFeatures)
 
 let JsonTemplate = {
     "type": "Feature",
@@ -89,7 +90,7 @@ GeoFeatures.forEach(feature =>
 //featureString = features.join(',');
 //features = JSON.parse('[' + featureString + ']');
 //finalFeatures = []
-console.log(features)
+//console.log(features)
 let dupes = 1;
 let valids = 1;
 let cycles = 1;
@@ -135,10 +136,28 @@ finalFeatures.features.forEach(feature => {
 console.log(`Final Duplicates: ${finalDupe}`);
 fs.writeFileSync("data/features.geojson",JSON.stringify(finalFeatures));
 
-exec(`ruby ruby/ocean-name.rb ${finalFeatures.features[8000].geometry.coordinates[0]} ${finalFeatures.features[8000].geometry.coordinates[1]}`, function (err, stdout, stderr) {
+child_process.exec(`ruby ruby/ocean-name.rb 0 0`, function (err, stdout, stderr) {
     console.log(stdout);
+    console.log(stderr);
 });
-
+/*
 finalFeatures.features.forEach(feature => {
-    
+    execSync(`ruby ruby/ocean-name.rb ${feature.geometry.coordinates[0]} ${feature.geometry.coordinates[1]}`, function (err, stdout, stderr) {
+        console.log(stdout);
+    });
 })
+
+//CallRuby();
+
+async function CallRuby(){
+    let featCount = 0
+    let running = false;
+    while(featCount < finalFeatures.features.length){
+        await execSync(`ruby ruby/ocean-name.rb ${finalFeatures.features[featCount].geometry.coordinates[0]} ${finalFeatures.features[featCount].geometry.coordinates[1]}`, function (err, stdout, stderr) {
+            console.log(stdout);
+            featCount++;
+        });
+        
+        
+    }
+}*/
