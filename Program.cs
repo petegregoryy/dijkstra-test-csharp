@@ -15,6 +15,7 @@ namespace dijkstra_test_csharp
             Program p = new Program();
 
             #region NodeCreation
+            /*
             Node node = p.CreateNode("Aki", 38.738439f, 140.741562f);
             Node node2 = p.CreateNodeWithOrigin("Yubikan", 38.658362f, 140.863543f, node, true);
             Node node3 = p.CreateNodeWithOrigin("Osaki City Hall", 38.576945f, 140.955698f, node2, true);
@@ -28,60 +29,43 @@ namespace dijkstra_test_csharp
             node4.AddConnectionBothWay(node5);
             node5.AddConnectionBothWay(node6);
             node6.AddConnectionBothWay(node9);
+            */
             #endregion
 
-            #region Json Testing
+            #region Json Serialisation and Conversion
 
             string filePath = "./data/features.geojson";
 
             List<GeoFeature> geoFeats = new List<GeoFeature>();
 
             string file = File.ReadAllText(filePath);
-            /*
-            string[] featuresString = file.Split(',');
 
-            List<String> featList = new List<string>();
-
-            foreach(string k in featuresString){
-                featList.Add(k);
-            }
-            Console.WriteLine(featList[0]);
-            for(int i = 0; i < featList.Count; i++){
-                //Console.WriteLine(featuresString[i]);
-                //GeoFeature tempDeserial = JsonConvert.DeserializeObject<GeoFeature>(featuresString[i]);
-                //geoFeats.Add(tempDeserial);
-                
-            }
-            */
 
             FeatureCollection collection = JsonConvert.DeserializeObject<FeatureCollection>(file);
 
+            for (int i = 0; i < collection.features.Count; i++)
+            {
+                p.globe.Add(new Node(collection.features[i].properties.name, collection.features[i].geometry.coordinates[0], collection.features[i].geometry.coordinates[1]));
+            }
 
+            for (int i = 0; i < collection.features.Count; i++)
+            {
+                if (collection.features[i].properties.connectsFrom != null)
+                {
+                    Node origin = p.globe.Find(e => e.GetName() == collection.features[i].properties.name);
+                    Node target = p.globe.Find(e => e.GetName() == collection.features[i].properties.connectsFrom);
 
-            string JsonInput = @"{
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [
-                        -76.10800171,
-                        37.09204102
-                    ]
-                },
-                'properties': {
-                    'name': 125192
+                    origin.AddConnection(target);
                 }
-            }";
+                else if (collection.features[i].properties.connectsTo != null)
+                {
+                    Node origin = p.globe.Find(e => e.GetName() == collection.features[i].properties.name);
+                    Node target = p.globe.Find(e => e.GetName() == collection.features[i].properties.connectsTo);
 
-            GeoFeature feat = JsonConvert.DeserializeObject<GeoFeature>(JsonInput);
-            float[] coords = { (float)-76.10800171, (float)37.09204102 };
-            GeoFeature testSerial = new GeoFeature("Feature", "Point", coords, "125192");
+                    origin.AddConnection(target);
+                }
+            }
 
-            string testSerialised = JsonConvert.SerializeObject(feat);
-
-            Console.WriteLine(testSerialised);
-
-
-            Console.WriteLine(feat);
 
             #endregion
 
@@ -101,7 +85,7 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("{0} - Distance: {1} km", con.GetName(), con.GetDistance());
             }
 
-            p.Dijkstra(node, node9);
+            //p.Dijkstra(node, node9);
         }
 
         Node CreateNode(string name, float lat, float lon)

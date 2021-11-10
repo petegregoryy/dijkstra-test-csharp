@@ -18,7 +18,9 @@ let JsonTemplate = {
       "coordinates": [125.6, 10.1]
     },
     "properties": {
-      "name": "Dinagat Islands"
+        "name": "Dinagat Islands",
+        "connectsTo": null,
+        "connectsFrom": null,
     }
 }
 
@@ -48,12 +50,36 @@ GeoFeatures.forEach(feature =>
         
         pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0],feature.geometry.coordinates[0][1]]
         pushJson.properties.name = feature.properties.From;
-        features.push(pushJson);
+        pushJson.properties.connectsTo = feature.properties.To;
+        features.push({
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
+            },
+            "properties": {
+                "name": feature.properties.From,
+                "connectsTo": feature.properties.To,
+                "connectsFrom": null,
+            }
+        });
 
         let pushJson2 = JsonTemplate;
-        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0],feature.geometry.coordinates[0][1]]
-        pushJson.properties.name = feature.properties.From;
-        features.push(pushJson2);
+        pushJson2.geometry.coordinates = [feature.geometry.coordinates[1][0],feature.geometry.coordinates[1][1]]
+        pushJson2.properties.name = feature.properties.To;
+        pushJson2.properties.connectsFrom = feature.properties.From;
+        features.push({
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0], feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
+            },
+            "properties": {
+              "name": feature.properties.To,
+                "connectsTo": null,
+                "connectsFrom": feature.properties.From,
+            }
+        });
     }
     else
     {
@@ -68,7 +94,9 @@ GeoFeatures.forEach(feature =>
               "coordinates": [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
             },
             "properties": {
-              "name": feature.properties.From
+                "name": feature.properties.From,
+                "connectsTo": feature.properties.To,
+                "connectsFrom": null,
             }
         });
 
@@ -82,7 +110,9 @@ GeoFeatures.forEach(feature =>
               "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0], feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
             },
             "properties": {
-              "name": feature.properties.To
+              "name": feature.properties.To,
+                "connectsTo": null,
+                "connectsFrom": feature.properties.From,
             }
         });
     }
