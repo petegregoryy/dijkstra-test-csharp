@@ -135,6 +135,7 @@ finalFeatures.features.forEach(feature => {
 });
 console.log(`Final Duplicates: ${finalDupe}`);
 fs.writeFileSync("data/features.geojson",JSON.stringify(finalFeatures));
+fs.writeFileSync("data/ocean-points.json",JSON.stringify(finalFeatures.features));
 
 child_process.exec(`ruby ruby/ocean-name.rb 0 0`, function (err, stdout, stderr) {
     console.log(stdout);

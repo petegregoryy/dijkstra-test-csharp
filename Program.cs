@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace dijkstra_test_csharp
 {
@@ -27,6 +29,62 @@ namespace dijkstra_test_csharp
             node5.AddConnectionBothWay(node6);
             node6.AddConnectionBothWay(node9);
             #endregion
+
+            #region Json Testing
+
+            string filePath = "./data/features.geojson";
+
+            List<GeoFeature> geoFeats = new List<GeoFeature>();
+
+            string file = File.ReadAllText(filePath);
+            /*
+            string[] featuresString = file.Split(',');
+
+            List<String> featList = new List<string>();
+
+            foreach(string k in featuresString){
+                featList.Add(k);
+            }
+            Console.WriteLine(featList[0]);
+            for(int i = 0; i < featList.Count; i++){
+                //Console.WriteLine(featuresString[i]);
+                //GeoFeature tempDeserial = JsonConvert.DeserializeObject<GeoFeature>(featuresString[i]);
+                //geoFeats.Add(tempDeserial);
+                
+            }
+            */
+
+            FeatureCollection collection = JsonConvert.DeserializeObject<FeatureCollection>(file);
+
+
+
+            string JsonInput = @"{
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [
+                        -76.10800171,
+                        37.09204102
+                    ]
+                },
+                'properties': {
+                    'name': 125192
+                }
+            }";
+
+            GeoFeature feat = JsonConvert.DeserializeObject<GeoFeature>(JsonInput);
+            float[] coords = { (float)-76.10800171, (float)37.09204102 };
+            GeoFeature testSerial = new GeoFeature("Feature", "Point", coords, "125192");
+
+            string testSerialised = JsonConvert.SerializeObject(feat);
+
+            Console.WriteLine(testSerialised);
+
+
+            Console.WriteLine(feat);
+
+            #endregion
+
 
             List<Connection> NodeConnections = new List<Connection>();
 
