@@ -218,6 +218,7 @@ let lastPerc = 0;
 
 finalFeatures.features.forEach(feature =>
 {
+    //console.log(`${percentCount}/${totalFeats}`);
     let perf_bef = performance.now();
     let p = percentCount / totalFeats;
     if (perfTimes.length > 20)
@@ -238,12 +239,14 @@ finalFeatures.features.forEach(feature =>
 
     let timetoFinish = avgTime * (totalFeats - percentCount);
 
-    if ((Math.round(100 * (p * 100).toPrecision(2)) / 100) % 0.1 == 0)
+    if (percentCount % 10 == 0)
     {
+        //console.log(percentCount % 10)
+        console.log(percent + " - " + msToTime(timetoFinish) + " until finished");
+        lastPerc = (Math.round(100 * (p * 100).toPrecision(2)) / 100);
         if ((Math.round(100 * (p * 100).toPrecision(2)) / 100) != lastPerc)
         {
-            console.log(percent + " - " + msToTime(timetoFinish) + " until finished");
-            lastPerc = (Math.round(100 * (p * 100).toPrecision(2)) / 100);
+
         }
 
     }
