@@ -8,6 +8,8 @@ class Properties
     public string connectsTo;
 
     public string connectsFrom;
+
+    public string location;
     public Properties(string _name, string _connectsTo, string _connectsFrom)
     {
         name = _name;

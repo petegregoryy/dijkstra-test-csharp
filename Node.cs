@@ -8,15 +8,18 @@ class Node
     private double _nDistance;
     private Node _shortestParent;
     private bool _visited;
+
+    private string _location;
     List<Connection> connections = new List<Connection>();
 
-    public Node(string name, float lat, float lon)
+    public Node(string name, float lat, float lon, string location)
     {
         _lat = lat;
         _long = lon;
         _name = name;
         _nDistance = 999999;
         _visited = false;
+        _location = location;
     }
 
     public Node(string name, float lat, float lon, Node peer)
@@ -125,6 +128,11 @@ class Node
     public Node GetShortestParent()
     {
         return _shortestParent;
+    }
+
+    public string GetLocation()
+    {
+        return _location;
     }
 
     public void PruneConnections()

@@ -51,7 +51,7 @@ namespace dijkstra_test_csharp
             List<GeoFeature> geoFeats = new List<GeoFeature>();
             for (int i = 0; i < p.collection.features.Count; i++)
             {
-                p.globe.Add(new Node(p.collection.features[i].properties.name, p.collection.features[i].geometry.coordinates[0], p.collection.features[i].geometry.coordinates[1]));
+                p.globe.Add(new Node(p.collection.features[i].properties.name, p.collection.features[i].geometry.coordinates[0], p.collection.features[i].geometry.coordinates[1], p.collection.features[i].properties.location));
             }
 
             for (int i = 0; i < p.linkCollection.features.Count; i++)
@@ -104,9 +104,9 @@ namespace dijkstra_test_csharp
         }
 
         #region Helpful Functions
-        Node CreateNode(string name, float lat, float lon)
+        Node CreateNode(string name, float lat, float lon, string location)
         {
-            Node tempNode = new Node(name, lat, lon);
+            Node tempNode = new Node(name, lat, lon, location);
             globe.Add(tempNode);
             return tempNode;
         }
@@ -168,7 +168,7 @@ namespace dijkstra_test_csharp
             for (int i = path.Count - 1; i >= 0; i--)
             {
                 count++;
-                Console.WriteLine("Step {2}: {0} - {1}", path[i].GetName(), path[i].GetDistance(), count);
+                Console.WriteLine("Step {2}: {0} - {1}", path[i].GetLocation(), path[i].GetDistance(), count);
 
             }
         }
