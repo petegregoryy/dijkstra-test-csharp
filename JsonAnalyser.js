@@ -3,14 +3,17 @@ const fs = require("fs");
 const child_process = require("child_process");
 const { performance } = require("perf_hooks");
 
-class Avg {
-    constructor() {}
+class Avg
+{
+    constructor() { }
 
-    static average(array) {
+    static average(array)
+    {
         var total = 0;
         var count = 0;
 
-        array.forEach(value => {
+        array.forEach(value =>
+        {
             total += value;
             count++;
         });
@@ -31,8 +34,8 @@ let GeoFeatures = GeoJsonFile.features;
 let JsonTemplate = {
     "type": "Feature",
     "geometry": {
-      "type": "Point",
-      "coordinates": [125.6, 10.1]
+        "type": "Point",
+        "coordinates": [125.6, 10.1]
     },
     "properties": {
         "name": "Dinagat Islands",
@@ -43,12 +46,12 @@ let JsonTemplate = {
 
 let finalFeatures = {
     "type": "FeatureCollection",
-    "features":[],
+    "features": [],
 }
 
 let uncheckedFeatures = {
     "type": "FeatureCollection",
-    "features":[],
+    "features": [],
 }
 
 
@@ -61,7 +64,7 @@ GeoFeatures.forEach(feature =>
 });
 GeoFeatures.forEach(feature =>
 {
-    
+
     if (first)
     {
         //features.push(`{"_lat":${feature.geometry.coordinates[0][0]},"_long":${feature.geometry.coordinates[0][1]},"_name":${feature.properties.From}}`)
@@ -69,33 +72,33 @@ GeoFeatures.forEach(feature =>
         first = false;
 
         let pushJson = JsonTemplate;
-        
-        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0],feature.geometry.coordinates[0][1]]
+
+        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
         pushJson.properties.name = feature.properties.From;
         pushJson.properties.connectsTo = feature.properties.To;
         features.push({
             "type": "Feature",
             "geometry": {
-              "type": "Point",
-              "coordinates": [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
+                "type": "Point",
+                "coordinates": [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
             },
             "properties": {
                 "name": feature.properties.From,
-                "location":null,
+                "location": null,
                 "connectsTo": feature.properties.To,
                 "connectsFrom": null,
             }
         });
 
         let pushJson2 = JsonTemplate;
-        pushJson2.geometry.coordinates = [feature.geometry.coordinates[1][0],feature.geometry.coordinates[1][1]]
+        pushJson2.geometry.coordinates = [feature.geometry.coordinates[1][0], feature.geometry.coordinates[1][1]]
         pushJson2.properties.name = feature.properties.To;
         pushJson2.properties.connectsFrom = feature.properties.From;
         features.push({
             "type": "Feature",
             "geometry": {
-              "type": "Point",
-              "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0], feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
+                "type": "Point",
+                "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length - 1][0], feature.geometry.coordinates[feature.geometry.coordinates.length - 1][1]]
             },
             "properties": {
                 "name": feature.properties.To,
@@ -108,14 +111,14 @@ GeoFeatures.forEach(feature =>
     else
     {
         let pushJson = JsonTemplate;
-        
-        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0],feature.geometry.coordinates[0][1]]
+
+        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
         pushJson.properties.name = feature.properties.From;
         features.push({
             "type": "Feature",
             "geometry": {
-              "type": "Point",
-              "coordinates": [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
+                "type": "Point",
+                "coordinates": [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
             },
             "properties": {
                 "name": feature.properties.From,
@@ -126,17 +129,17 @@ GeoFeatures.forEach(feature =>
         });
 
         let pushJson2 = JsonTemplate;
-        pushJson.geometry.coordinates = [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0],feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
+        pushJson.geometry.coordinates = [feature.geometry.coordinates[feature.geometry.coordinates.length - 1][0], feature.geometry.coordinates[feature.geometry.coordinates.length - 1][1]]
         pushJson.properties.name = feature.properties.From;
         features.push({
             "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0], feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
+                "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length - 1][0], feature.geometry.coordinates[feature.geometry.coordinates.length - 1][1]]
             },
             "properties": {
                 "name": feature.properties.To,
-                "location":null,
+                "location": null,
                 "connectsTo": null,
                 "connectsFrom": feature.properties.From,
             }
@@ -159,20 +162,25 @@ features.forEach(featureChecking =>
     uncheckedFeatures.features.push(featureChecking);
     cycles++
     valid = false;
-    finalFeatures.features.forEach(element => {
-        if(featureChecking.properties.name === element.properties.name && featureChecking.geometry.coordinates[0] === element.geometry.coordinates[0] && featureChecking.geometry.coordinates[1] === element.geometry.coordinates[1]){
+    finalFeatures.features.forEach(element =>
+    {
+        if (featureChecking.properties.name === element.properties.name && featureChecking.geometry.coordinates[0] === element.geometry.coordinates[0] && featureChecking.geometry.coordinates[1] === element.geometry.coordinates[1])
+        {
             valid = false;
             return
         }
-        else{
+        else
+        {
             valid = true
-            
+
         }
     });
-    if(valid){
+    if (valid)
+    {
         valids = finalFeatures.features.push(featureChecking)
     }
-    else{
+    else
+    {
         dupes++
     }
 
@@ -183,15 +191,19 @@ console.log(`Dupes: ${dupes} - Valids: ${valids} - Cycles: ${cycles}`);
 
 
 let finalDupe = 0;
-finalFeatures.features.forEach(feature => {
+finalFeatures.features.forEach(feature =>
+{
     let workingNum = 0;
-    finalFeatures.features.forEach(innerFeature => {
-        
-        if (feature === innerFeature) {
+    finalFeatures.features.forEach(innerFeature =>
+    {
+
+        if (feature === innerFeature)
+        {
             workingNum++;
         }
     });
-    if(workingNum >1){
+    if (workingNum > 1)
+    {
         finalDupe++
     }
 });
@@ -204,43 +216,51 @@ let perfTimes = [0];
 
 let lastPerc = 0;
 
-finalFeatures.features.forEach(feature => {
+finalFeatures.features.forEach(feature =>
+{
     let perf_bef = performance.now();
     let p = percentCount / totalFeats;
-    if (perfTimes.length > 20) {
+    if (perfTimes.length > 20)
+    {
         perfTimes = perfTimes.slice(1);
     }
     var total = 0;
-        var count = 0;
+    var count = 0;
 
-        perfTimes.forEach(value => {
-            total += value;
-            count++;
-        });
+    perfTimes.forEach(value =>
+    {
+        total += value;
+        count++;
+    });
 
     avgTime = total / count;
     let percent = (Math.round(100 * (p * 100).toPrecision(2)) / 100) + "%";
-    
+
     let timetoFinish = avgTime * (totalFeats - percentCount);
-    if ((Math.round(100 * (p * 100).toPrecision(2)) / 100) % 0.1 == 0) {
-        if((Math.round(100*(p * 100).toPrecision(2))/100) != lastPerc){
+
+    if ((Math.round(100 * (p * 100).toPrecision(2)) / 100) % 0.1 == 0)
+    {
+        if ((Math.round(100 * (p * 100).toPrecision(2)) / 100) != lastPerc)
+        {
             console.log(percent + " - " + msToTime(timetoFinish) + " until finished");
-            lastPerc = (Math.round(100 * (p * 100).toPrecision(2)) / 100);    
+            lastPerc = (Math.round(100 * (p * 100).toPrecision(2)) / 100);
         }
-        
+
     }
-    
+
 
     let locationCall = child_process.execSync(`ruby ruby/ocean-name.rb ${feature.geometry.coordinates[0]} ${feature.geometry.coordinates[1]}`);
     let locString = locationCall.toString();
-    if (locString.length != 1) {
+    if (locString.length != 1)
+    {
         locString = locString.replace(/=>/g, ":");
-            
+
         let jsonLoc = JSON.parse(locString);
         //console.log(jsonLoc.name);
         feature.properties.location = jsonLoc.name;
     }
-    else {
+    else
+    {
         //console.log("Unknown Sea")
         feature.properties.location = "Unknown Sea";
     }
@@ -254,8 +274,8 @@ finalFeatures.features.forEach(feature => {
 
 console.log(`Final Duplicates: ${finalDupe}`);
 fs.writeFileSync("data/features.geojson", JSON.stringify(finalFeatures));
-fs.writeFileSync("data/features-inc-dupes.geojson",JSON.stringify(uncheckedFeatures));
-fs.writeFileSync("data/ocean-points.json",JSON.stringify(finalFeatures.features));
+fs.writeFileSync("data/features-inc-dupes.geojson", JSON.stringify(uncheckedFeatures));
+fs.writeFileSync("data/ocean-points.json", JSON.stringify(finalFeatures.features));
 
 let nodeVer = child_process.execSync("node -v");
 
@@ -272,7 +292,8 @@ let jsonBobj = JSON.parse(oceanNameString);
 
 console.log(jsonBobj);
 
-child_process.exec(`ruby ruby/ocean-name.rb 0 0`, function (err, stdout, stderr) {
+child_process.exec(`ruby ruby/ocean-name.rb 0 0`, function (err, stdout, stderr)
+{
     console.log(stdout);
     console.log(stderr);
 });
@@ -297,16 +318,17 @@ async function CallRuby(){
         
     }
 }*/
-function msToTime(duration) {
-        var milliseconds = Math.floor((duration % 1000) / 100),
-          seconds = Math.floor((duration / 1000) % 60),
-          minutes = Math.floor((duration / (1000 * 60)) % 60),
-          hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+function msToTime(duration)
+{
+    var milliseconds = Math.floor((duration % 1000) / 100),
+        seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60),
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-        hours = (hours < 10) ? "0" + hours : hours;
-        minutes = (minutes < 10) ? "0" + minutes : minutes;
-        seconds = (seconds < 10) ? "0" + seconds : seconds;
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-        return hours + " hours, " + minutes + " minutes";
-  }
+    return hours + " hours, " + minutes + " minutes";
+}
 
