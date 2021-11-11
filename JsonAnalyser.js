@@ -1,7 +1,24 @@
 const fs = require("fs");
-var exec = require("child_process").exec;
-var execSync = require("child_process").execSync;
+
 const child_process = require("child_process");
+const { performance } = require("perf_hooks");
+
+class Avg {
+    constructor() {}
+
+    static average(array) {
+        var total = 0;
+        var count = 0;
+
+        array.forEach(value => {
+            total += value;
+            count++;
+        });
+
+        return total / count;
+    }
+}
+
 
 let GeoJsonFile = JSON.parse(fs.readFileSync("data/25.geojson"));
 
@@ -64,6 +81,7 @@ GeoFeatures.forEach(feature =>
             },
             "properties": {
                 "name": feature.properties.From,
+                "location":null,
                 "connectsTo": feature.properties.To,
                 "connectsFrom": null,
             }
@@ -80,7 +98,8 @@ GeoFeatures.forEach(feature =>
               "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0], feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
             },
             "properties": {
-              "name": feature.properties.To,
+                "name": feature.properties.To,
+                "location": null,
                 "connectsTo": null,
                 "connectsFrom": feature.properties.From,
             }
@@ -100,6 +119,7 @@ GeoFeatures.forEach(feature =>
             },
             "properties": {
                 "name": feature.properties.From,
+                "location": null,
                 "connectsTo": feature.properties.To,
                 "connectsFrom": null,
             }
@@ -111,11 +131,12 @@ GeoFeatures.forEach(feature =>
         features.push({
             "type": "Feature",
             "geometry": {
-              "type": "Point",
-              "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0], feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
+                "type": "Point",
+                "coordinates": [feature.geometry.coordinates[feature.geometry.coordinates.length -1][0], feature.geometry.coordinates[feature.geometry.coordinates.length -1][1]]
             },
             "properties": {
-              "name": feature.properties.To,
+                "name": feature.properties.To,
+                "location":null,
                 "connectsTo": null,
                 "connectsFrom": feature.properties.From,
             }
@@ -130,6 +151,9 @@ let dupes = 1;
 let valids = 1;
 let cycles = 1;
 finalFeatures.features.push(features[0]);
+
+
+
 features.forEach(featureChecking =>
 {
     uncheckedFeatures.features.push(featureChecking);
@@ -157,11 +181,13 @@ console.log("Final Featurres!")
 console.log(finalFeatures)
 console.log(`Dupes: ${dupes} - Valids: ${valids} - Cycles: ${cycles}`);
 
+
 let finalDupe = 0;
 finalFeatures.features.forEach(feature => {
     let workingNum = 0;
     finalFeatures.features.forEach(innerFeature => {
-        if(feature === innerFeature){
+        
+        if (feature === innerFeature) {
             workingNum++;
         }
     });
@@ -169,10 +195,82 @@ finalFeatures.features.forEach(feature => {
         finalDupe++
     }
 });
+
+let percentCount = 0;
+let totalFeats = finalFeatures.features.length;
+let lastPerfTime = 0;
+let avgTime = 0;
+let perfTimes = [0];
+
+let lastPerc = 0;
+
+finalFeatures.features.forEach(feature => {
+    let perf_bef = performance.now();
+    let p = percentCount / totalFeats;
+    if (perfTimes.length > 20) {
+        perfTimes = perfTimes.slice(1);
+    }
+    var total = 0;
+        var count = 0;
+
+        perfTimes.forEach(value => {
+            total += value;
+            count++;
+        });
+
+    avgTime = total / count;
+    let percent = (Math.round(100 * (p * 100).toPrecision(2)) / 100) + "%";
+    
+    let timetoFinish = avgTime * (totalFeats - percentCount);
+    if ((Math.round(100 * (p * 100).toPrecision(2)) / 100) % 0.1 == 0) {
+        if((Math.round(100*(p * 100).toPrecision(2))/100) != lastPerc){
+            console.log(percent + " - " + msToTime(timetoFinish) + " until finished");
+            lastPerc = (Math.round(100 * (p * 100).toPrecision(2)) / 100);    
+        }
+        
+    }
+    
+
+    let locationCall = child_process.execSync(`ruby ruby/ocean-name.rb ${feature.geometry.coordinates[0]} ${feature.geometry.coordinates[1]}`);
+    let locString = locationCall.toString();
+    if (locString.length != 1) {
+        locString = locString.replace(/=>/g, ":");
+            
+        let jsonLoc = JSON.parse(locString);
+        //console.log(jsonLoc.name);
+        feature.properties.location = jsonLoc.name;
+    }
+    else {
+        //console.log("Unknown Sea")
+        feature.properties.location = "Unknown Sea";
+    }
+    percentCount++;
+    let perf_aft = performance.now();
+
+    lastPerfTime = perf_aft - perf_bef;
+    perfTimes.push(lastPerfTime);
+});
+
+
 console.log(`Final Duplicates: ${finalDupe}`);
 fs.writeFileSync("data/features.geojson", JSON.stringify(finalFeatures));
 fs.writeFileSync("data/features-inc-dupes.geojson",JSON.stringify(uncheckedFeatures));
 fs.writeFileSync("data/ocean-points.json",JSON.stringify(finalFeatures.features));
+
+let nodeVer = child_process.execSync("node -v");
+
+console.log(nodeVer.toString());
+
+let OceanName = child_process.execSync("ruby ruby/ocean-name.rb 0 0");
+let oceanNameString = OceanName.toString();
+
+oceanNameString = oceanNameString.replace(/=>/g, ':');
+
+console.log(OceanName.toString());
+
+let jsonBobj = JSON.parse(oceanNameString);
+
+console.log(jsonBobj);
 
 child_process.exec(`ruby ruby/ocean-name.rb 0 0`, function (err, stdout, stderr) {
     console.log(stdout);
@@ -199,3 +297,16 @@ async function CallRuby(){
         
     }
 }*/
+function msToTime(duration) {
+        var milliseconds = Math.floor((duration % 1000) / 100),
+          seconds = Math.floor((duration / 1000) % 60),
+          minutes = Math.floor((duration / (1000 * 60)) % 60),
+          hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+        hours = (hours < 10) ? "0" + hours : hours;
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+        return hours + " hours, " + minutes + " minutes";
+  }
+

@@ -1,0 +1,19 @@
+{
+  "name": "dijkstra-test-csharp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "JsonAnalyser.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petegregoryy/dijkstra-test-csharp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/petegregoryy/dijkstra-test-csharp/issues"
+  },
+  "homepage": "https://github.com/petegregoryy/dijkstra-test-csharp#readme"
+}
