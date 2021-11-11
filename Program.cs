@@ -80,13 +80,13 @@ namespace dijkstra_test_csharp
                     NodeConnections.Add(c);
                 }
             }
-
+            /*
             foreach (Connection con in NodeConnections)
             {
                 Console.WriteLine("{0} - Distance: {1} km", con.GetName(), con.GetDistance());
             }
-
-            Node node = p.globe.Find(e => e.GetName() == "89209");
+            */
+            Node node = p.globe.Find(e => e.GetName() == "136033");
             Node node1 = p.globe.Find(e => e.GetName() == "202662");
 
             p.Dijkstra(node, node1);
@@ -118,6 +118,7 @@ namespace dijkstra_test_csharp
 
         void Dijkstra(Node origin, Node target)
         {
+            Console.WriteLine("----Navigating----");
             int firstIndex = IndexByName(origin.GetName());
             globe[firstIndex].UpdateDistance(0, null);
             queue.Add(globe[firstIndex]);
@@ -131,7 +132,7 @@ namespace dijkstra_test_csharp
                         queue.Add(queue[k].GetConnections()[i].GetNode());
                         queue[k].GetConnections()[i].GetNode().UpdateDistance(queue[k].GetConnections()[i].GetDistance() + queue[k].GetDistance(), queue[k]);
                         queue[k].GetConnections()[i].GetNode().SetVisited();
-                        Console.WriteLine("Parent: {0} - Visiting: {1} Distance: {2}", queue[k].GetName(), queue[k].GetConnections()[i].GetNode().GetName(), queue[k].GetConnections()[i].GetNode().GetDistance());
+                        //Console.WriteLine("Parent: {0} - Visiting: {1} Distance: {2}", queue[k].GetName(), queue[k].GetConnections()[i].GetNode().GetName(), queue[k].GetConnections()[i].GetNode().GetDistance());
                     }
                 }
             }
@@ -143,7 +144,7 @@ namespace dijkstra_test_csharp
 
             while (shortestParent != null)
             {
-                Console.WriteLine("Shortest Parent: {0}", shortestParent.GetName());
+                //Console.WriteLine("Shortest Parent: {0}", shortestParent.GetName());
                 path.Add(shortestParent);
                 shortestParent = shortestParent.GetShortestParent();
             }
