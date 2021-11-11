@@ -126,4 +126,21 @@ class Node
     {
         return _shortestParent;
     }
+
+    public void PruneConnections()
+    {
+        for (int i = 0; i < connections.Count; i++)
+        {
+            for (int k = 0; k < connections.Count; k++)
+            {
+                if (i != k)
+                {
+                    if (connections[i] == connections[k])
+                    {
+                        Console.WriteLine("Pruning Duplicate Connection - {0}", connections[i]);
+                    }
+                }
+            }
+        }
+    }
 }

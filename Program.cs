@@ -68,6 +68,11 @@ namespace dijkstra_test_csharp
             }
 
 
+            foreach (Node point in p.globe)
+            {
+                point.PruneConnections();
+            }
+
             #endregion
 
 
