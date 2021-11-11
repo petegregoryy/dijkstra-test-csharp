@@ -10,6 +10,9 @@ namespace dijkstra_test_csharp
         List<Node> globe = new List<Node>();
         List<Node> queue = new List<Node>();
 
+        FeatureCollection linkCollection;
+        FeatureCollection collection;
+
         static void Main(string[] args)
         {
             Program p = new Program();
@@ -37,31 +40,33 @@ namespace dijkstra_test_csharp
             string filePathForLinks = "./data/features-inc-dupes.geojson";
             string filePath = "./data/features.geojson";
 
-            List<GeoFeature> geoFeats = new List<GeoFeature>();
+
 
             string file = File.ReadAllText(filePath);
             string links = File.ReadAllText(filePathForLinks);
-            FeatureCollection linkCollection = JsonConvert.DeserializeObject<FeatureCollection>(links);
-            FeatureCollection collection = JsonConvert.DeserializeObject<FeatureCollection>(file);
 
-            for (int i = 0; i < collection.features.Count; i++)
+            p.linkCollection = JsonConvert.DeserializeObject<FeatureCollection>(links);
+            p.collection = JsonConvert.DeserializeObject<FeatureCollection>(file);
+
+            List<GeoFeature> geoFeats = new List<GeoFeature>();
+            for (int i = 0; i < p.collection.features.Count; i++)
             {
-                p.globe.Add(new Node(collection.features[i].properties.name, collection.features[i].geometry.coordinates[0], collection.features[i].geometry.coordinates[1]));
+                p.globe.Add(new Node(p.collection.features[i].properties.name, p.collection.features[i].geometry.coordinates[0], p.collection.features[i].geometry.coordinates[1]));
             }
 
-            for (int i = 0; i < linkCollection.features.Count; i++)
+            for (int i = 0; i < p.linkCollection.features.Count; i++)
             {
-                if (linkCollection.features[i].properties.connectsFrom != null)
+                if (p.linkCollection.features[i].properties.connectsFrom != null)
                 {
-                    Node origin = p.globe.Find(e => e.GetName() == linkCollection.features[i].properties.name);
-                    Node target = p.globe.Find(e => e.GetName() == linkCollection.features[i].properties.connectsFrom);
+                    Node origin = p.globe.Find(e => e.GetName() == p.linkCollection.features[i].properties.name);
+                    Node target = p.globe.Find(e => e.GetName() == p.linkCollection.features[i].properties.connectsFrom);
 
                     origin.AddConnection(target);
                 }
-                else if (linkCollection.features[i].properties.connectsTo != null)
+                else if (p.linkCollection.features[i].properties.connectsTo != null)
                 {
-                    Node origin = p.globe.Find(e => e.GetName() == linkCollection.features[i].properties.name);
-                    Node target = p.globe.Find(e => e.GetName() == linkCollection.features[i].properties.connectsTo);
+                    Node origin = p.globe.Find(e => e.GetName() == p.linkCollection.features[i].properties.name);
+                    Node target = p.globe.Find(e => e.GetName() == p.linkCollection.features[i].properties.connectsTo);
 
                     origin.AddConnection(target);
                 }

@@ -14,6 +14,13 @@ class GeoFeature
         properties = new Properties(_name, _connectsTo, _connectsFrom);
     }
 
+    public GeoFeature(string _type, string _geoType, float[] _geoCoords, string _name)
+    {
+        type = _type;
+        geometry = new Geometry(_geoType, _geoCoords);
+        properties = new Properties(_name, null, null);
+    }
+
     public string GetTypeString()
     {
         return type;

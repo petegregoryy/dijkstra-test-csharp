@@ -135,9 +135,13 @@ class Node
             {
                 if (i != k)
                 {
-                    if (connections[i] == connections[k])
+                    if (connections[i].GetName() == connections[k].GetName() && connections[i].GetDistance() == connections[k].GetDistance())
                     {
                         Console.WriteLine("Pruning Duplicate Connection - {0}", connections[i]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("No Duplicate Found");
                     }
                 }
             }
