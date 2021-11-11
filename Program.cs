@@ -80,7 +80,7 @@ namespace dijkstra_test_csharp
 
             #endregion
 
-
+            #region Adding Connections
             List<Connection> NodeConnections = new List<Connection>();
 
             foreach (Node point in p.globe)
@@ -96,12 +96,14 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("{0} - Distance: {1} km", con.GetName(), con.GetDistance());
             }
             */
+            #endregion
             Node node = p.globe.Find(e => e.GetName() == "136033");
             Node node1 = p.globe.Find(e => e.GetName() == "202662");
 
             p.Dijkstra(node, node1);
         }
 
+        #region Helpful Functions
         Node CreateNode(string name, float lat, float lon)
         {
             Node tempNode = new Node(name, lat, lon);
@@ -124,7 +126,11 @@ namespace dijkstra_test_csharp
                 return tempNode;
             }
         }
-
+        int IndexByName(string name)
+        {
+            return globe.FindIndex(point => point.GetName() == name);
+        }
+        #endregion
 
         void Dijkstra(Node origin, Node target)
         {
@@ -167,9 +173,6 @@ namespace dijkstra_test_csharp
             }
         }
 
-        int IndexByName(string name)
-        {
-            return globe.FindIndex(point => point.GetName() == name);
-        }
+
     }
 }

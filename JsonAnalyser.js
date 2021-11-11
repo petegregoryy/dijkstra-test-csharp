@@ -3,24 +3,7 @@ const fs = require("fs");
 const child_process = require("child_process");
 const { performance } = require("perf_hooks");
 
-class Avg
-{
-    constructor() { }
 
-    static average(array)
-    {
-        var total = 0;
-        var count = 0;
-
-        array.forEach(value =>
-        {
-            total += value;
-            count++;
-        });
-
-        return total / count;
-    }
-}
 
 
 let GeoJsonFile = JSON.parse(fs.readFileSync("data/25.geojson"));
@@ -31,18 +14,6 @@ let GeoFeatures = GeoJsonFile.features;
 
 //console.log(GeoFeatures)
 
-let JsonTemplate = {
-    "type": "Feature",
-    "geometry": {
-        "type": "Point",
-        "coordinates": [125.6, 10.1]
-    },
-    "properties": {
-        "name": "Dinagat Islands",
-        "connectsTo": null,
-        "connectsFrom": null,
-    }
-}
 
 let finalFeatures = {
     "type": "FeatureCollection",
@@ -58,10 +29,7 @@ let uncheckedFeatures = {
 
 let features = [];
 let first = true;
-GeoFeatures.forEach(feature =>
-{
-    //console.log(feature.properties)
-});
+
 GeoFeatures.forEach(feature =>
 {
 
@@ -71,11 +39,6 @@ GeoFeatures.forEach(feature =>
         //features.push(`{"_lat":${feature.geometry.coordinates[1][0]},"_long":${feature.geometry.coordinates[1][1]},"_name":${feature.properties.To}}`)
         first = false;
 
-        let pushJson = JsonTemplate;
-
-        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
-        pushJson.properties.name = feature.properties.From;
-        pushJson.properties.connectsTo = feature.properties.To;
         features.push({
             "type": "Feature",
             "geometry": {
@@ -90,10 +53,6 @@ GeoFeatures.forEach(feature =>
             }
         });
 
-        let pushJson2 = JsonTemplate;
-        pushJson2.geometry.coordinates = [feature.geometry.coordinates[1][0], feature.geometry.coordinates[1][1]]
-        pushJson2.properties.name = feature.properties.To;
-        pushJson2.properties.connectsFrom = feature.properties.From;
         features.push({
             "type": "Feature",
             "geometry": {
@@ -110,10 +69,6 @@ GeoFeatures.forEach(feature =>
     }
     else
     {
-        let pushJson = JsonTemplate;
-
-        pushJson.geometry.coordinates = [feature.geometry.coordinates[0][0], feature.geometry.coordinates[0][1]]
-        pushJson.properties.name = feature.properties.From;
         features.push({
             "type": "Feature",
             "geometry": {
@@ -128,9 +83,6 @@ GeoFeatures.forEach(feature =>
             }
         });
 
-        let pushJson2 = JsonTemplate;
-        pushJson.geometry.coordinates = [feature.geometry.coordinates[feature.geometry.coordinates.length - 1][0], feature.geometry.coordinates[feature.geometry.coordinates.length - 1][1]]
-        pushJson.properties.name = feature.properties.From;
         features.push({
             "type": "Feature",
             "geometry": {
