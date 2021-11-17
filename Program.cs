@@ -124,8 +124,8 @@ namespace dijkstra_test_csharp
             }
             */
             #endregion
-            Node node = p.globe.Find(e => e.GetName() == "136033");
-            Node node1 = p.globe.Find(e => e.GetName() == "202016");
+            Node node = p.globe.Find(e => e.GetName() == "198758");
+            Node node1 = p.globe.Find(e => e.GetName() == "201799");
 
             p.Dijkstra(node, node1);
         }
