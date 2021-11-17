@@ -38,7 +38,7 @@ namespace dijkstra_test_csharp
             #region Json Serialisation and Conversion
 
             string filePathForLinks = "./data/features-inc-dupes.geojson";
-            string filePath = "./data/features.geojson";
+            string filePath = "./data/checked_features.geojson";
 
 
 
@@ -68,6 +68,10 @@ namespace dijkstra_test_csharp
             }
             Console.WriteLine("Node Number: {0}", p.globe.Count);
 
+            #endregion
+
+            #region Link Creation
+
             for (int i = 0; i < p.linkCollection.features.Count; i++)
             {
                 if (p.linkCollection.features[i].properties.connectsFrom != null)
@@ -76,6 +80,7 @@ namespace dijkstra_test_csharp
                     Node target = p.globe.Find(e => e.GetName() == p.linkCollection.features[i].properties.connectsFrom);
 
                     origin.AddConnection(target);
+                    target.AddConnection(origin);
                 }
                 else if (p.linkCollection.features[i].properties.connectsTo != null)
                 {
@@ -83,6 +88,7 @@ namespace dijkstra_test_csharp
                     Node target = p.globe.Find(e => e.GetName() == p.linkCollection.features[i].properties.connectsTo);
 
                     origin.AddConnection(target);
+                    target.AddConnection(origin);
                 }
             }
 
@@ -101,11 +107,11 @@ namespace dijkstra_test_csharp
             manualorigin.AddConnection(manualtarget);
             manualtarget.AddConnection(manualorigin);
 
-            Node manualorigin2 = p.globe.Find(e => e.GetName() == "201055");
-            Node manualtarget2 = p.globe.Find(e => e.GetName() == "201799");
+            //Node manualorigin2 = p.globe.Find(e => e.GetName() == "201055");
+            //Node manualtarget2 = p.globe.Find(e => e.GetName() == "201799");
 
-            manualorigin2.AddConnection(manualtarget2);
-            manualtarget2.AddConnection(manualorigin2);
+            //manualorigin2.AddConnection(manualtarget2);
+            //manualtarget2.AddConnection(manualorigin2);
 
             #region Adding Connections
             List<Connection> NodeConnections = new List<Connection>();
@@ -125,7 +131,7 @@ namespace dijkstra_test_csharp
             */
             #endregion
             Node node = p.globe.Find(e => e.GetName() == "136033");
-            Node node1 = p.globe.Find(e => e.GetName() == "202016");
+            Node node1 = p.globe.Find(e => e.GetName() == "202589");
 
             p.Dijkstra(node, node1);
         }
@@ -174,9 +180,10 @@ namespace dijkstra_test_csharp
                     {
                         queue.Add(queue[k].GetConnections()[i].GetNode());
                         queue[k].GetConnections()[i].GetNode().UpdateDistance(queue[k].GetConnections()[i].GetDistance() + queue[k].GetDistance(), queue[k]);
-                        queue[k].GetConnections()[i].GetNode().SetVisited();
-                        //Console.WriteLine("Parent: {0} - Visiting: {1} Distance: {2}", queue[k].GetName(), queue[k].GetConnections()[i].GetNode().GetName(), queue[k].GetConnections()[i].GetNode().GetDistance());
+                        //queue[k].GetConnections()[i].GetNode().SetVisited();
+                        Console.WriteLine("Parent: {0} - Visiting: {1} Distance: {2}", queue[k].GetName(), queue[k].GetConnections()[i].GetNode().GetName(), queue[k].GetConnections()[i].GetNode().GetDistance());
                     }
+                    queue[k].SetVisited();
                 }
             }
 
@@ -198,13 +205,14 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("Step {2}: {3} - {0} - {1}", path[i].GetLocation(), path[i].GetDistance(), count,path[i].GetName());
 
             }
-            Node redSea1 = globe.Find(e => e.GetName() == "201055");
-            Node redSea2 = globe.Find(e => e.GetName() == "198758");
+            Node redSea1 = globe.Find(e => e.GetName() == "202498");
+            Node redSea2 = globe.Find(e => e.GetName() == "202535");
             string sea1string = JsonConvert.SerializeObject(redSea1);
             string sea2string = JsonConvert.SerializeObject(redSea2);
             Console.WriteLine("Name: {0} Location: {1} Shortest Parent: {2} Distance: {3}",redSea1.GetName(),redSea1.GetLocation(),redSea1.GetShortestParent().GetName(),redSea1.GetDistance());
             Console.WriteLine("Name: {0} Location: {1} Shortest Parent: {2} Distance: {3}",redSea2.GetName(),redSea2.GetLocation(),redSea2.GetShortestParent().GetName(),redSea2.GetDistance());
             redSea1.ListConnections();
+            Console.WriteLine("Red sea 2");
             redSea2.ListConnections();
         }
 

@@ -25,7 +25,30 @@ let uncheckedFeatures = {
     "features": [],
 }
 
+let checkedFeatures = {
+    "type": "FeatureCollection",
+    "features": [],
+}
 
+let newFeats = JSON.parse(fs.readFileSync("data/features.geojson"));
+console.log(newFeats.features.length);
+for (let x = 0; x < newFeats.features.length; x++) {
+    const element = newFeats.features[x];
+    let dupe = false;
+    for (let y = 0; y < checkedFeatures.features.length; y++) {
+        const element2 = newFeats.features[y];
+        if (x != y) {
+            if (element.properties.name === element2.properties.name) {
+                dupe = true;
+            }
+        }
+    }
+    if (!dupe) {
+        checkedFeatures.features.push(newFeats.features[x]);
+    }
+}
+console.log(checkedFeatures.features.length);
+fs.writeFileSync("data/checked_features.geojson", JSON.stringify(checkedFeatures));
 
 let features = [];
 let first = true;

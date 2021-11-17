@@ -155,8 +155,28 @@ class Node
                 }
             }
         }
-        toRemove.Sort();
-        toRemove.Reverse();
+        if(toRemove.Count != 0){
+            
+            toRemove.Sort();
+            toRemove.Reverse();
+            var toRemoveDistinct = new HashSet<int>(toRemove);
+            List<int> toRemove2In = new List<int>();
+            foreach (int item in toRemoveDistinct)
+            {
+                toRemove2In.Add(item);
+            }
+            int count = 0;
+            int length = connections.Count;
+            Console.WriteLine("Node: {0}", _name);
+            while(count < length-1){
+                Console.WriteLine("Index: {0} - Length: {1}", toRemove2In[count], length);
+                connections.RemoveAt(toRemove2In[count]);
+                count++;
+                length = connections.Count;
+                
+            }
+        }
+        
         foreach (int index in toRemove)
         {
             //Console.WriteLine("Index: {0} - Length: {1}", index, connections.Count);
