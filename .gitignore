@@ -521,3 +521,6 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,node
+bin/Debug/*
+bin/*
+obj/*

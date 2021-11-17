@@ -159,8 +159,8 @@ class Node
         toRemove.Reverse();
         foreach (int index in toRemove)
         {
-            Console.WriteLine("Index: {0} - Length: {1}", index, connections.Count);
-            connections.RemoveAt(index);
+            //Console.WriteLine("Index: {0} - Length: {1}", index, connections.Count);
+            //connections.RemoveAt(index);
         }
     }
 
