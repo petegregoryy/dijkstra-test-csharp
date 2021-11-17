@@ -134,7 +134,7 @@ class Node
     {
         return _location;
     }
-
+    List<int> toRemove = new List<int>();
     public void PruneConnections()
     {
         for (int i = 0; i < connections.Count; i++)
@@ -146,6 +146,7 @@ class Node
                     if (connections[i].GetName() == connections[k].GetName() && connections[i].GetDistance() == connections[k].GetDistance())
                     {
                         //Console.WriteLine("Pruning Duplicate Connection - {0}", connections[i]);
+                        toRemove.Add(k);
                     }
                     else
                     {
@@ -153,6 +154,20 @@ class Node
                     }
                 }
             }
+        }
+        toRemove.Sort();
+        toRemove.Reverse();
+        foreach (int index in toRemove)
+        {
+            Console.WriteLine("Index: {0} - Length: {1}", index, connections.Count);
+            connections.RemoveAt(index);
+        }
+    }
+
+    public void ListConnections(){
+        for (int i = 0; i < connections.Count; i++)
+        {
+            Console.WriteLine("Connection: {0} - Distance in km: {1}", connections[i].GetName(),connections[i].GetDistance());
         }
     }
 }

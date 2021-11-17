@@ -66,7 +66,7 @@ namespace dijkstra_test_csharp
                     }
                 }
             }
-
+            Console.WriteLine("Node Number: {0}", p.globe.Count);
 
             for (int i = 0; i < p.linkCollection.features.Count; i++)
             {
@@ -204,7 +204,8 @@ namespace dijkstra_test_csharp
             string sea2string = JsonConvert.SerializeObject(redSea2);
             Console.WriteLine("Name: {0} Location: {1} Shortest Parent: {2} Distance: {3}",redSea1.GetName(),redSea1.GetLocation(),redSea1.GetShortestParent().GetName(),redSea1.GetDistance());
             Console.WriteLine("Name: {0} Location: {1} Shortest Parent: {2} Distance: {3}",redSea2.GetName(),redSea2.GetLocation(),redSea2.GetShortestParent().GetName(),redSea2.GetDistance());
-
+            redSea1.ListConnections();
+            redSea2.ListConnections();
         }
 
 
