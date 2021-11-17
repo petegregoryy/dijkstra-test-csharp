@@ -11,6 +11,7 @@ class Node
 
     private bool _connectionSatisfied;
     private int _connectionChecks;
+
     private string _location;
     List<Connection> connections = new List<Connection>();
 
@@ -62,7 +63,17 @@ class Node
 
     public void UpdateDistance(double dist, Node par)
     {
-        _connectionChecks++;
+        if(par != null){
+            for (int i = 0; i < connections.Count-1; i++)
+            {   
+                Console.WriteLine(par.GetName());
+                Console.WriteLine(connections[i].GetNode().GetName());
+                if(par.GetName() == connections[i].GetNode().GetName()){
+                    _connectionChecks++;
+                }
+            }
+        }
+        
         
         if (dist < _nDistance)
         {
@@ -153,7 +164,9 @@ class Node
 
     public void SetVisited()
     {
-        _visited = true;
+        if(_connectionSatisfied){
+            _visited = true;
+        }
     }
 
     public Node GetShortestParent()
@@ -165,6 +178,12 @@ class Node
     {
         return _location;
     }
+
+    public int GetCheckNum(){
+        return _connectionChecks;
+    }
+
+
     List<int> toRemove = new List<int>();
     public void PruneConnections()
     {
@@ -207,18 +226,12 @@ class Node
                 
             }
         }
-        
-        foreach (int index in toRemove)
-        {
-            //Console.WriteLine("Index: {0} - Length: {1}", index, connections.Count);
-            //connections.RemoveAt(index);
-        }
     }
 
     public void ListConnections(){
         for (int i = 0; i < connections.Count; i++)
         {
-            Console.WriteLine("Connection: {0} - Distance in km: {1}", connections[i].GetName(),connections[i].GetDistance());
+            Console.WriteLine("Connection: {0} - Distance in km: {1} - Visited: {2} - Checked: {3} times", connections[i].GetName(),connections[i].GetDistance(),connections[i].GetNode().IsVisited(),connections[i].GetNode().GetCheckNum());
         }
     }
 }
