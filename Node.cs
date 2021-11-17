@@ -66,8 +66,11 @@ class Node
         if(par != null){
             for (int i = 0; i < connections.Count-1; i++)
             {   
-                Console.WriteLine(par.GetName());
-                Console.WriteLine(connections[i].GetNode().GetName());
+                string redsea1 = par.GetName();
+                string goal = connections[i].GetNode().GetName();
+                if(_name == "202016"){
+                    Console.WriteLine("202016 from {2} -Distance Passed: {0} - Current Distance {1}",dist,_nDistance,par.GetName());
+                }
                 if(par.GetName() == connections[i].GetNode().GetName()){
                     _connectionChecks++;
                 }
@@ -77,7 +80,10 @@ class Node
         
         if (dist < _nDistance)
         {
-            Console.WriteLine(_connectionChecks);
+            if(par !=null){
+                //Console.WriteLine("New Parent for {0}! Name: {1} new Distance: {2} Old Distance: {3}",_name,par.GetName(),dist,_nDistance);
+            }
+            
             _nDistance = dist;
             _shortestParent = par;
         }

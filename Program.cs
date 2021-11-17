@@ -180,7 +180,7 @@ namespace dijkstra_test_csharp
                         if(queue[k].GetConnections()[i].GetNode() == target){
                             queue[k].GetConnections()[i].GetNode().UpdateDistance(queue[k].GetConnections()[i].GetDistance() + queue[k].GetDistance(), queue[k]);
                             queue[k].GetConnections()[i].GetNode().SetVisited();
-                            break;
+                            //break;
                         }
                         else{
                             queue.Add(queue[k].GetConnections()[i].GetNode());
