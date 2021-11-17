@@ -131,7 +131,7 @@ namespace dijkstra_test_csharp
             */
             #endregion
             Node node = p.globe.Find(e => e.GetName() == "136033");
-            Node node1 = p.globe.Find(e => e.GetName() == "202589");
+            Node node1 = p.globe.Find(e => e.GetName() == "202016");
 
             p.Dijkstra(node, node1);
         }
@@ -171,20 +171,28 @@ namespace dijkstra_test_csharp
             int firstIndex = IndexByName(origin.GetName());
             globe[firstIndex].UpdateDistance(0, null);
             queue.Add(globe[firstIndex]);
-
+            Node checkOrigin = origin;
             for (int k = 0; k < queue.Count; k++)
             {
                 for (int i = 0; i < queue[k].GetConnections().Count; i++)
                 {
-                    if (!queue[k].GetConnections()[i].GetNode().IsVisited())
+                    if (queue[k].GetConnections()[i].GetNode() != checkOrigin)
                     {
                         queue.Add(queue[k].GetConnections()[i].GetNode());
+                        Console.WriteLine("queue length: {0}",queue.Count);
                         queue[k].GetConnections()[i].GetNode().UpdateDistance(queue[k].GetConnections()[i].GetDistance() + queue[k].GetDistance(), queue[k]);
                         //queue[k].GetConnections()[i].GetNode().SetVisited();
-                        Console.WriteLine("Parent: {0} - Visiting: {1} Distance: {2}", queue[k].GetName(), queue[k].GetConnections()[i].GetNode().GetName(), queue[k].GetConnections()[i].GetNode().GetDistance());
+                        //Console.WriteLine("Parent: {0} - Visiting: {1} Distance: {2}", queue[k].GetName(), queue[k].GetConnections()[i].GetNode().GetName(), queue[k].GetConnections()[i].GetNode().GetDistance());
                     }
-                    queue[k].SetVisited();
+                    if(target.isSatisfied()){
+                        break;
+                    }
                 }
+                if(target.isSatisfied()){
+                    break;
+                }
+                checkOrigin = queue[k];
+                
             }
 
             int targetIndex = IndexByName(target.GetName());
@@ -205,8 +213,9 @@ namespace dijkstra_test_csharp
                 Console.WriteLine("Step {2}: {3} - {0} - {1}", path[i].GetLocation(), path[i].GetDistance(), count,path[i].GetName());
 
             }
-            Node redSea1 = globe.Find(e => e.GetName() == "202498");
-            Node redSea2 = globe.Find(e => e.GetName() == "202535");
+            
+            Node redSea1 = globe.Find(e => e.GetName() == "202016");
+            Node redSea2 = globe.Find(e => e.GetName() == "202492");
             string sea1string = JsonConvert.SerializeObject(redSea1);
             string sea2string = JsonConvert.SerializeObject(redSea2);
             Console.WriteLine("Name: {0} Location: {1} Shortest Parent: {2} Distance: {3}",redSea1.GetName(),redSea1.GetLocation(),redSea1.GetShortestParent().GetName(),redSea1.GetDistance());
@@ -214,6 +223,7 @@ namespace dijkstra_test_csharp
             redSea1.ListConnections();
             Console.WriteLine("Red sea 2");
             redSea2.ListConnections();
+            
         }
 
 

@@ -9,6 +9,8 @@ class Node
     private Node _shortestParent;
     private bool _visited;
 
+    private bool _connectionSatisfied;
+    private int _connectionChecks;
     private string _location;
     List<Connection> connections = new List<Connection>();
 
@@ -60,16 +62,26 @@ class Node
 
     public void UpdateDistance(double dist, Node par)
     {
+        _connectionChecks++;
+        
         if (dist < _nDistance)
         {
+            Console.WriteLine(_connectionChecks);
             _nDistance = dist;
             _shortestParent = par;
+        }
+        if(_connectionChecks >= connections.Count){
+            _connectionSatisfied = true;
         }
     }
 
     public double GetDistance()
     {
         return _nDistance;
+    }
+
+    public bool isSatisfied(){
+        return _connectionSatisfied;
     }
 
     public List<Connection> GetConnections()
@@ -79,8 +91,27 @@ class Node
 
     public void AddConnection(Node peer)
     {
+        bool dupe = false;
         Connection con = new Connection(this, peer);
-        connections.Add(con);
+        if(connections.Count > 0){
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if(connections[i].GetName() == con.GetName()){
+                    dupe = true;
+                    return;
+                }
+                else{
+                    dupe = false;
+                }
+                
+            }
+            if(!dupe){
+                connections.Add(con);
+            }
+        }
+        else{
+            connections.Add(con);
+        }
     }
 
     public void AddConnectionBack(Node peer)
@@ -145,7 +176,7 @@ class Node
                 {
                     if (connections[i].GetName() == connections[k].GetName() && connections[i].GetDistance() == connections[k].GetDistance())
                     {
-                        //Console.WriteLine("Pruning Duplicate Connection - {0}", connections[i]);
+                        Console.WriteLine("Pruning Duplicate Connection - {0}", connections[i]);
                         toRemove.Add(k);
                     }
                     else
