@@ -9,7 +9,7 @@ class Properties
 
     public string connectsFrom;
 
-    public string location;
+    public string location = "Unknown Sea";
     public Properties(string _name, string _connectsTo, string _connectsFrom)
     {
         name = _name;

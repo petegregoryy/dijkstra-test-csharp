@@ -53,6 +53,20 @@ namespace dijkstra_test_csharp
             {
                 p.globe.Add(new Node(p.collection.features[i].properties.name, p.collection.features[i].geometry.coordinates[0], p.collection.features[i].geometry.coordinates[1], p.collection.features[i].properties.location));
             }
+            Console.WriteLine("Removing Any Duplicates!");
+            for (int x = 0; x < p.globe.Count; x++)
+            {
+                for (int y = 0; y < p.globe.Count; y++)
+                {
+                    if(x!=y){
+                        if(p.globe[x].GetName() == p.globe[y].GetName()){
+                            Console.WriteLine("Duplicate Detected! {0} - {1}", p.globe[y].GetName(), p.globe[y].GetLocation());
+                            p.globe.RemoveAt(y);                            
+                        }
+                    }
+                }
+            }
+
 
             for (int i = 0; i < p.linkCollection.features.Count; i++)
             {
@@ -72,13 +86,26 @@ namespace dijkstra_test_csharp
                 }
             }
 
-
+            Console.WriteLine("Pruning Connections");
             foreach (Node point in p.globe)
             {
                 point.PruneConnections();
             }
-
+            
             #endregion
+
+            // Manual Link adding
+            Node manualorigin = p.globe.Find(e => e.GetName() == "201799");
+            Node manualtarget = p.globe.Find(e => e.GetName() == "202016");
+
+            manualorigin.AddConnection(manualtarget);
+            manualtarget.AddConnection(manualorigin);
+
+            Node manualorigin2 = p.globe.Find(e => e.GetName() == "201055");
+            Node manualtarget2 = p.globe.Find(e => e.GetName() == "201799");
+
+            manualorigin2.AddConnection(manualtarget2);
+            manualtarget2.AddConnection(manualorigin2);
 
             #region Adding Connections
             List<Connection> NodeConnections = new List<Connection>();
@@ -98,7 +125,7 @@ namespace dijkstra_test_csharp
             */
             #endregion
             Node node = p.globe.Find(e => e.GetName() == "136033");
-            Node node1 = p.globe.Find(e => e.GetName() == "202662");
+            Node node1 = p.globe.Find(e => e.GetName() == "202016");
 
             p.Dijkstra(node, node1);
         }
@@ -168,9 +195,16 @@ namespace dijkstra_test_csharp
             for (int i = path.Count - 1; i >= 0; i--)
             {
                 count++;
-                Console.WriteLine("Step {2}: {0} - {1}", path[i].GetLocation(), path[i].GetDistance(), count);
+                Console.WriteLine("Step {2}: {3} - {0} - {1}", path[i].GetLocation(), path[i].GetDistance(), count,path[i].GetName());
 
             }
+            Node redSea1 = globe.Find(e => e.GetName() == "201055");
+            Node redSea2 = globe.Find(e => e.GetName() == "198758");
+            string sea1string = JsonConvert.SerializeObject(redSea1);
+            string sea2string = JsonConvert.SerializeObject(redSea2);
+            Console.WriteLine("Name: {0} Location: {1} Shortest Parent: {2} Distance: {3}",redSea1.GetName(),redSea1.GetLocation(),redSea1.GetShortestParent().GetName(),redSea1.GetDistance());
+            Console.WriteLine("Name: {0} Location: {1} Shortest Parent: {2} Distance: {3}",redSea2.GetName(),redSea2.GetLocation(),redSea2.GetShortestParent().GetName(),redSea2.GetDistance());
+
         }
 
 

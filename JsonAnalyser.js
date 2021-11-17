@@ -187,7 +187,7 @@ finalFeatures.features.forEach(feature =>
     });
 
     avgTime = total / count;
-    let percent = (Math.round(100 * (p * 100).toPrecision(2)) / 100) + "%";
+    let percent = (Math.round(100 * (p * 100).toFixed(2)) / 100) + "%";
 
     let timetoFinish = avgTime * (totalFeats - percentCount);
 
@@ -195,7 +195,7 @@ finalFeatures.features.forEach(feature =>
     {
         //console.log(percentCount % 10)
         console.log(percent + " - " + msToTime(timetoFinish) + " until finished");
-        lastPerc = (Math.round(100 * (p * 100).toPrecision(2)) / 100);
+        lastPerc = (Math.round(100 * (p * 100).toFixed(3)) / 100);
         if ((Math.round(100 * (p * 100).toPrecision(2)) / 100) != lastPerc)
         {
 
@@ -204,7 +204,7 @@ finalFeatures.features.forEach(feature =>
     }
 
 
-    let locationCall = child_process.execSync(`ruby ruby/ocean-name.rb ${feature.geometry.coordinates[0]} ${feature.geometry.coordinates[1]}`);
+    let locationCall = child_process.execSync(`ruby ruby/ocean-name.rb ${feature.geometry.coordinates[1]} ${feature.geometry.coordinates[0]}`);
     let locString = locationCall.toString();
     if (locString.length != 1)
     {
